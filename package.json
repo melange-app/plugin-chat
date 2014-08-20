@@ -1,5 +1,5 @@
 {
-  "id": "ch.airdispat.plugins.chat",
+  "id": "com.github.melange-app.plugin-chat",
   "name": "Chat",
   "version": "0.0.1",
   "description": "Send quick messages to one another.",
