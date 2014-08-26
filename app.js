@@ -76,7 +76,7 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
 
   $scope.selectConversation = function(index) {
     $scope.selected = index;
-    
+
     $timeout(function() {
       msgDiv.scrollTop = msgDiv.scrollHeight;
     }, 0);
@@ -121,5 +121,21 @@ msgApp.filter('reverse', function() {
   return function(items) {
     if (!angular.isArray(items)) return [];
     return items ? items.slice().reverse() : [];
+  };
+});
+
+msgApp.filter('parseUrl', function() {
+  var replaceTP = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+  var replaceWWW = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+
+  return function(text, target) {
+    angular.forEach(text.match(replaceTP), function(url) {
+      text = text.replace(replaceTP, "<a href=\"$1\" target=\"_blank\">$1</a>");
+    });
+    angular.forEach(text.match(replaceTP), function(url) {
+      text = text.replace(replaceTP, "$1<a href=\"$2\" target=\"_blank\">$2</a>");
+    });
+
+    return text;
   };
 });

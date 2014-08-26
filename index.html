@@ -39,7 +39,7 @@
             <table>
               <tr>
                 <td valign="bottom">
-                  <div ng-repeat="message in users[selected].messages | reverse" class="message" ng-class="{ 'sender': message.sender, 'receiver': !message.sender }">
+                  <div ng-repeat="message in users[selected].messages | reverse | parseURL" class="message" ng-class="{ 'sender': message.sender, 'receiver': !message.sender }">
                     {{ message.message.string }}
                   </div>
                 </td>
