@@ -18,7 +18,7 @@
         <div class="addMessage">
           <a class="btn btn-success btn-xs" ng-class="{'disabled': loading}" ng-click="newConversation()" href="">Start Conversation</a>
         </div>
-        <div class="conversation" ng-class="{'active': $parent.selected == index}" ng-click="selectConversation(index)" ng-repeat="(index, user) in users">
+        <div class="conversation" ng-class="{'active': $parent.selectedIndex == index}" ng-click="selectConversation(index, user)" ng-repeat="(index, user) in users">
           {{ user.name == '' ? user.alias : user.name }}
         </div>
       </div>
@@ -33,13 +33,13 @@
         </div>
         <div ng-hide="selected === undefined">
           <div class="top" style="width: 100%;">
-            To: <input type="text" class="input-xs to" placeholder="Address" ng-model="users[selected].alias">
+            To: <input type="text" class="input-xs to" placeholder="Address" ng-model="selected.alias">
           </div>
           <div class="messages" id="messages">
             <table>
               <tr>
                 <td valign="bottom">
-                  <div ng-repeat="message in users[selected].messages | reverse" class="message" ng-class="{ 'sender': message.sender, 'receiver': !message.sender }">
+                  <div ng-repeat="message in selected.messages | reverse" class="message" ng-class="{ 'sender': message.sender, 'receiver': !message.sender }">
                     {{ message.message.string }}
                   </div>
                 </td>

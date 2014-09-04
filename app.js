@@ -69,13 +69,17 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
     var obj = {
       name: "",
       messages: [],
+      isNew: true,
     }
-    $scope.users.push(obj);
-    $scope.selected = ($scope.users.length - 1);
+    // $scope.users.push(obj);
+    // $scope.selected = ($scope.users.length - 1);
+    $scope.selected = obj;
+    $scope.selectedIndex = -1;
   }
 
-  $scope.selectConversation = function(index) {
-    $scope.selected = index;
+  $scope.selectConversation = function(index, obj) {
+    $scope.selected = obj;
+    $scope.selectedIndex = index;
 
     $timeout(function() {
       msgDiv.scrollTop = msgDiv.scrollHeight;
@@ -84,14 +88,19 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
 
   $scope.send = function() {
     if($scope.newMessage === "") { return }
-    console.log($scope.users[$scope.selected].alias);
+    console.log($scope.selected.alias);
+
+    if($scope.selected.isNew === true) {
+      $scope.users.unshift($scope.selected);
+      $scope.selectedIndex = 0;
+    }
 
     $scope.sending = true;
     melange.createMessage({
       to: [{
-        alias: $scope.users[$scope.selected].alias,
+        alias: $scope.selected.alias,
       }],
-      name: "chat/" + normalize($scope.newMessage, $scope.users[$scope.selected].alias),
+      name: "chat/" + normalize($scope.newMessage, $scope.selected.alias),
       date: (new Date()).toISOString(),
       public: false,
       components: {
@@ -100,7 +109,7 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
     }, melange.angularCallback($scope, function(status) {
       $scope.sending = false;
 
-      $scope.users[$scope.selected].messages.unshift({
+      $scope.selected.messages.unshift({
         sender: true,
         message: {
           string: $scope.newMessage,
