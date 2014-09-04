@@ -1,5 +1,22 @@
 'use strict';
 
+var moveArray = function(arr, old_index, new_index) {
+    while (old_index < 0) {
+        old_index += arr.length;
+    }
+    while (new_index < 0) {
+        new_index += arr.length;
+    }
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length;
+        while ((k--) + 1) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr; // for testing purposes
+};
+
 var numbers = function(str) {
   var res = 0,
   len = str.length;
@@ -92,6 +109,9 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
 
     if($scope.selected.isNew === true) {
       $scope.users.unshift($scope.selected);
+      $scope.selectedIndex = 0;
+    } else {
+      moveArray($scope.users, $scope.selectedIndex, 0)
       $scope.selectedIndex = 0;
     }
 
