@@ -76,7 +76,7 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
 
   $scope.selectConversation = function(index) {
     $scope.selected = index;
-    
+
     $timeout(function() {
       msgDiv.scrollTop = msgDiv.scrollHeight;
     }, 0);
@@ -109,6 +109,7 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
 
       $timeout(function() {
         msgDiv.scrollTop = msgDiv.scrollHeight;
+        document.getElementById("newMessageText").focus();
       }, 0);
 
       $scope.newMessage = "";
