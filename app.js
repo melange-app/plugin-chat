@@ -36,48 +36,75 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
   $scope.newMessage = "";
 
   $scope.loading = true;
-  melange.findMessages(["airdispat.ch/chat/body", "?airdispat.ch/chat/data"], undefined, melange.angularCallback($scope, function(data) {
-    var users = {};
-    console.log(data);
-    for(var i in data) {
-      var k = data[i];
 
-      var key = "";
-      var profile = {};
+  var users = [];
+  $scope.users = users;
 
-      if(k["self"]) {
-        key = k.to[0].fingerprint;
-        profile = k.to[0];
-      } else {
-        key = k.from.fingerprint;
-        profile = k.from;
-      }
+  var handleMessage = function(k, front) {
+    var key = "";
+    var profile = {};
 
-      if(users[key] === undefined) {
-        users[key] = {
-          name: profile.name,
-          alias: profile.alias,
-          fingerprint: profile.fingerprint,
-          messages: [],
-        }
-      }
-
-      users[key].messages.push({
-        sender: k["self"],
-        message: k.components["airdispat.ch/chat/body"],
-        timestamp: k.date,
-      });
+    if(k["self"] === true) {
+      key = k.to[0].fingerprint;
+      profile = k.to[0];
+    } else {
+      key = k.from.fingerprint;
+      profile = k.from;
     }
 
-    var output = [];
+    var foundObj = undefined;
+    for(var i in users) {
+      if(users[i].key === key) {
+        foundObj = users[i];
+        break;
+      }
+    }
 
-    // We should do some sorting here.
-    for (var i in users) {
-      output.push(users[i])
+    if(foundObj === undefined) {
+      foundObj = {
+        key: key,
+        name: profile.name,
+        alias: profile.alias,
+        fingerprint: profile.fingerprint,
+        messages: [],
+      }
+      users.push(foundObj);
+    }
+
+    var msgDate = new Date(k.date);
+    if(msgDate > foundObj.latest || foundObj.latest === undefined) {
+      foundObj.latest = msgDate;
+    }
+
+    var doIt = function(data) { foundObj.messages.push(data); }
+    if(front === true) { doIt = function(data) { foundObj.messages.unshift(data); } }
+
+    doIt({
+      sender: k["self"],
+      message: k.components["airdispat.ch/chat/body"],
+      timestamp: msgDate,
+    });
+  }
+
+  melange.findMessages(["airdispat.ch/chat/body", "?airdispat.ch/chat/data"], undefined, melange.angularCallback($scope, function(data) {
+    for(var i in data) {
+      handleMessage(data[i]);
     }
 
     $scope.loading = false;
-    $scope.users = output;
+    console.log(users);
+  }),
+  melange.angularCallback($scope, function(msg) {
+    console.log("New realtime message");
+    // We already populated self messages earlier. This assumes a one-device
+    // model of the user.
+    if(msg.self) { return; }
+
+    handleMessage(msg, true);
+
+    $timeout(function() {
+      msgDiv.scrollTop = msgDiv.scrollHeight;
+    }, 0);
   }));
 
   var msgDiv = document.getElementById("messages");
@@ -88,15 +115,15 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
       messages: [],
       isNew: true,
     }
+
     // $scope.users.push(obj);
     // $scope.selected = ($scope.users.length - 1);
+
     $scope.selected = obj;
-    $scope.selectedIndex = -1;
   }
 
-  $scope.selectConversation = function(index, obj) {
+  $scope.selectConversation = function(obj) {
     $scope.selected = obj;
-    $scope.selectedIndex = index;
 
     $timeout(function() {
       msgDiv.scrollTop = msgDiv.scrollHeight;

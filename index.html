@@ -18,7 +18,7 @@
         <div class="addMessage">
           <a class="btn btn-success btn-xs" ng-class="{'disabled': loading}" ng-click="newConversation()" href="">Start Conversation</a>
         </div>
-        <div class="conversation" ng-class="{'active': $parent.selectedIndex == index}" ng-click="selectConversation(index, user)" ng-repeat="(index, user) in users">
+        <div class="conversation" ng-class="{'active': $parent.selected.key == user.key}" ng-click="selectConversation(user)" ng-repeat="user in users | orderBy: '-latest'">
           {{ user.name == '' ? user.alias : user.name }}
         </div>
       </div>
