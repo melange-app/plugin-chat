@@ -6,6 +6,9 @@
   width: 175px;
   background-color: #f0f0f0;
   border-right: 1px #b6b6b6 solid;
+
+  overflow: auto;
+  overflow-x: hidden;
 }
 
 .main {
@@ -87,6 +90,14 @@
   padding: 8px;
   clear: both;
   border-radius: 5px;
+}
+
+.main .timestamp {
+  padding: 10px;
+  clear: both;
+  text-align: center;
+  font-size: 10px;
+  color: #545454;
 }
 
 .main .messages .message.sender {
