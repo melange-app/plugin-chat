@@ -1,8 +1,7 @@
 {
-  
   "id": "com.github.jbarrow.plugin-chat",
   "name": "Chat",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "Send quick messages to one another.",
   "permissions": {
     "read-message": ["airdispat.ch/chat/body", "airdispat.ch/chat/data"],
