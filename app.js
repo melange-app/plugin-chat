@@ -131,6 +131,8 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
   }
 
   $scope.send = function() {
+    var sendingDate = (new Date()).toISOString();
+
     if($scope.newMessage === "") { return }
     console.log($scope.selected.alias);
 
@@ -148,7 +150,7 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
         alias: $scope.selected.alias,
       }],
       name: "chat/" + normalize($scope.newMessage, $scope.selected.alias),
-      date: (new Date()).toISOString(),
+      date: sendingDate,
       public: false,
       components: {
         "airdispat.ch/chat/body": {string: $scope.newMessage},
@@ -158,6 +160,7 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
 
       $scope.selected.messages.unshift({
         sender: true,
+        timestamp: sendingDate,
         message: {
           string: $scope.newMessage,
         },
