@@ -23,10 +23,10 @@
 .addMessage {
   border-bottom: 1px #b6b6b6 solid;
   text-align: right;
+  padding: 5px;
 }
 
 .addMessage a {
-  margin: 5px;
 }
 
 .conversation {

@@ -111,7 +111,10 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
     // model of the user.
     if(msg.self) { return; }
 
-    handleMessage(msg, true);
+    var theMessage = handleMessage(msg, true);
+    if($scope.notifications) {
+      var note = new Notification(theMessage.from.name, {body: theMessage.message.message});
+    }
 
     $timeout(function() {
       msgDiv.scrollTop = msgDiv.scrollHeight;
@@ -185,6 +188,9 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
       $scope.newMessage = "";
     }));
   }
+
+
+  $scope.notifications = true;
 
 }]);
 

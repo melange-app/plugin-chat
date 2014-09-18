@@ -16,7 +16,12 @@
     <div class="container-fluid">
       <div class="sidebar">
         <div class="addMessage">
-          <a class="btn btn-success btn-xs" ng-class="{'disabled': loading}" ng-click="newConversation()" href="">Start Conversation</a>
+          <a class="btn btn-xs" ng-class="{'btn-danger': notifications, 'btn-primary': !notifications}" ng-click="notifications = !notifications" href="">
+            <i class="fa" ng-class="{'fa-bell': !notifications, 'fa-bell-o': notifications}"></i>
+          </a>
+          <a class="btn btn-success btn-xs" ng-class="{'disabled': loading}" ng-click="newConversation()" href="">
+            <i class="fa fa-plus"></i>
+          </a>
         </div>
         <div class="conversation" ng-class="{'active': $parent.selected.key == user.key}" ng-click="selectConversation(user)" ng-repeat="user in users | orderBy: '-latest'">
           {{ user.name == '' ? user.alias : user.name }}
