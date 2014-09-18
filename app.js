@@ -45,10 +45,12 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
     var profile = {};
 
     if(k["self"] === true) {
-      key = k.to[0].fingerprint;
+      // key = k.to[0].fingerprint;
+      key = k.to[0].alias;
       profile = k.to[0];
     } else {
-      key = k.from.fingerprint;
+      // key = k.from.fingerprint;
+      key = k.from.alias;
       profile = k.from;
     }
 
@@ -69,6 +71,10 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
         messages: [],
       }
       users.push(foundObj);
+    } else {
+      if(foundObj.name == "" && profile.name != profile.alias) {
+        foundObj.name = profile.name;
+      }
     }
 
     var msgDate = new Date(k.date);
@@ -79,11 +85,16 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
     var doIt = function(data) { foundObj.messages.push(data); }
     if(front === true) { doIt = function(data) { foundObj.messages.unshift(data); } }
 
-    doIt({
+    var theMessage = {
       sender: k["self"],
       message: k.components["airdispat.ch/chat/body"],
       timestamp: msgDate,
-    });
+    }
+    doIt(theMessage);
+    return {
+      from: foundObj,
+      message: theMessage,
+    };
   }
 
   melange.findMessages(["airdispat.ch/chat/body", "?airdispat.ch/chat/data"], undefined, melange.angularCallback($scope, function(data) {
