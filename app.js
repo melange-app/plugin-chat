@@ -113,7 +113,7 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
 
     var theMessage = handleMessage(msg, true);
     if($scope.notifications) {
-      var note = new Notification(theMessage.from.name, {body: theMessage.message.message});
+      var note = new Notification(theMessage.from.name, {body: theMessage.message.message.string});
     }
 
     $timeout(function() {
