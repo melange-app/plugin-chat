@@ -30,7 +30,7 @@ var normalize = function(body, to) {
   return numbers(to) + "-" + numbers(body) + "-" + (new Date()).getTime();
 }
 
-var msgApp = angular.module('msgApp', []);
+var msgApp = angular.module('msgApp', ['ngSanitize']);
 
 msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeout) {
   $scope.newMessage = "";
@@ -141,6 +141,10 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
 
     $timeout(function() {
       msgDiv.scrollTop = msgDiv.scrollHeight;
+      $(".messages .message a").click(function() {
+        melange.openLink($(this).attr('href'));
+        return false;
+      });
     }, 0);
   }
 

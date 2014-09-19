@@ -6,8 +6,11 @@
     <link href="http://common.melange:7776/css/bootswatch-yeti/3.1.1" rel="stylesheet" type="text/css">
     <link href="http://common.melange:7776/css/font-awesome/4.1.0" rel="stylesheet" type="text/css">
     <link href="/styles.css" rel="stylesheet" type="text/css">
+    <!-- JQuery -->
+    <script src="http://common.melange:7776/js/jquery/1.11.1"></script>
     <!-- Angular -->
     <script src="http://common.melange:7776/js/angular/1.2.18"></script>
+    <script src="http://common.melange:7776/js/angular-sanitize/1.2.18"></script>
     <!-- Melange -->
     <script src="http://common.melange:7776/js/melange/0.0.1"></script>
     <script src="/app.js"></script>
@@ -48,8 +51,7 @@
                     <div ng-if="index > 0 ? (selected.messages[selected.messages.length - index].timestamp.getTime() + 300000) < message.timestamp.getTime() : true" class="timestamp">
                       {{ message.timestamp | date:"MMMM d h:mm a"}}
                     </div>
-                    <div class="message" ng-class="{ 'sender': message.sender, 'receiver': !message.sender }">
-                      {{ message.message.string }}
+                    <div class="message" ng-class="{ 'sender': message.sender, 'receiver': !message.sender }" ng-bind-html="message.message.string | linky">
                     </div>
                   </div>
                 </td>
