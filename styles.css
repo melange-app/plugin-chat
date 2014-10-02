@@ -83,6 +83,7 @@
   height: 100%;
   width: 100%;
   margin: 0;
+  table-layout: fixed;
 }
 
 .main .messages .message {
@@ -90,6 +91,8 @@
   padding: 8px;
   clear: both;
   border-radius: 5px;
+  max-width: 75%;
+  word-wrap: break-word;
 }
 
 .main .timestamp {
