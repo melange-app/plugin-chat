@@ -17,20 +17,25 @@
   </head>
   <body ng-app="msgApp" ng-controller="messagesCtrl">
     <div class="container-fluid">
-      <div class="sidebar">
+      <div class="sidebar" ng-class="{'sidebar-hidden': selected !== undefined}">
         <div class="addMessage">
-          <a class="btn btn-xs" ng-class="{'btn-danger': notifications, 'btn-primary': !notifications}" ng-click="notifications = !notifications" href="">
-            <i class="fa" ng-class="{'fa-bell': !notifications, 'fa-bell-o': notifications}"></i>
-          </a>
           <a class="btn btn-success btn-xs" ng-class="{'disabled': loading}" ng-click="newConversation()" href="">
-            <i class="fa fa-plus"></i>
+            <i class="fa fa-plus"></i> New
           </a>
         </div>
         <div class="conversation" ng-class="{'active': $parent.selected.key == user.key}" ng-click="selectConversation(user)" ng-repeat="user in users | orderBy: '-latest'">
+          <div class="avatar mobile-block pull-left" style="background-image: url('{{ user.avatar }}');">
+          </div>
           {{ user.name == '' ? user.alias : user.name }}
+          <div class="text-muted mobile-block">
+            <small>
+              <strong>{{ user.messages[0].sender ? "You:" : "" }}</strong>
+              {{ user.messages[0].message.string | limitTo:100 }}
+            </small>
+          </div>
         </div>
       </div>
-      <div class="main">
+      <div class="main" ng-class="{'main-show': selected !== undefined}">
         <div ng-show="selected === undefined" class="text-center">
           <h3 class="text-muted" style="margin-top: 40px;">Select a conversation to get started.</h3>
           <p class="text-muted">Or, start a new converstaion.</p>
@@ -41,6 +46,9 @@
         </div>
         <div ng-hide="selected === undefined">
           <div class="top" style="width: 100%;">
+            <a href="" ng-click="selected = undefined" class="btn btn-inverse btn-xs mobile">
+              <i class="fa fa-chevron-left"></i> Back
+            </a>
             To: <input type="text" class="input-xs to" placeholder="Address" ng-model="selected.alias">
           </div>
           <div class="messages" id="messages">

@@ -68,6 +68,7 @@ msgApp.controller('messagesCtrl', ["$scope", "$timeout", function($scope, $timeo
         name: profile.name,
         alias: profile.alias,
         fingerprint: profile.fingerprint,
+        avatar: profile.avatar,
         messages: [],
       }
       users.push(foundObj);
